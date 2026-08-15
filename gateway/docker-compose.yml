@@ -1,0 +1,40 @@
+version: "3.8"
+
+# Self-hosted n8n — no trial expiry, you own the data and the webhook.
+# Usage:
+#   1. cp .env.example .env   (fill in your values)
+#   2. docker compose up -d
+#   3. Open http://<host>:5678 to build/import your gateway workflow
+#   4. Your webhook will live at http://<host>:5678/webhook/<path>
+#      (or your domain, if you put a reverse proxy in front — recommended
+#      for production so you get HTTPS and a stable public URL)
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-UTC}
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:?set a strong password in .env}
+      # Only if you want n8n itself to call an LLM provider from within the
+      # workflow (e.g. an HTTP Request node to Groq/OpenRouter holding the
+      # real key server-side — this is what keeps the CLI itself keyless).
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - n8n_net
+
+networks:
+  n8n_net:
+    driver: bridge
+
+volumes:
+  n8n_data:

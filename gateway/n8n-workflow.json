@@ -1,0 +1,567 @@
+{
+  "name": "dare-gateway",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dare",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-in",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-groq",
+      "name": "Call Groq",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_GROQ_CREDENTIAL_ID",
+          "name": "Groq API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"meta-llama/llama-3.3-70b-instruct:free\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-openrouter",
+      "name": "Call OpenRouter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_OPENROUTER_CREDENTIAL_ID",
+          "name": "OpenRouter API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.together.xyz/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-together",
+      "name": "Call Together",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_TOGETHER_CREDENTIAL_ID",
+          "name": "Together API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"accounts/fireworks/models/llama-v3p3-70b-instruct\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-fireworks",
+      "name": "Call Fireworks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_FIREWORKS_CREDENTIAL_ID",
+          "name": "Fireworks API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"meta-llama/Llama-3.3-70B-Instruct\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-deepinfra",
+      "name": "Call DeepInfra",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1640,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_DEEPINFRA_CREDENTIAL_ID",
+          "name": "DeepInfra API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"mistral-large-latest\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-mistral",
+      "name": "Call Mistral",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_MISTRAL_CREDENTIAL_ID",
+          "name": "Mistral API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"llama-3.1-sonar-large-128k-online\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-perplexity",
+      "name": "Call Perplexity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2200,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_PERPLEXITY_CREDENTIAL_ID",
+          "name": "Perplexity API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepseek.com/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"deepseek-chat\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-deepseek",
+      "name": "Call DeepSeek",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2480,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_DEEPSEEK_CREDENTIAL_ID",
+          "name": "DeepSeek API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.endpoints.anyscale.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"model\": \"meta-llama/Meta-Llama-3-70B-Instruct\",\n  \"messages\": [\n    { \"role\": \"system\", \"content\": $('Webhook').item.json.body.system },\n    { \"role\": \"user\", \"content\": $('Webhook').item.json.body.prompt }\n  ]\n} }}",
+        "options": {
+          "timeout": 15000
+        },
+        "onError": "continueErrorOutput"
+      },
+      "id": "call-anyscale",
+      "name": "Call Anyscale",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2760,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_ANYSCALE_CREDENTIAL_ID",
+          "name": "Anyscale API Key (header: Authorization, value: Bearer <key>)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"text\": $json.choices[0].message.content,\n  \"model\": $json.model\n} }}"
+      },
+      "id": "respond",
+      "name": "Respond to CLI",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        520,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 502,
+        "responseBody": "={{ {\n  \"error\": \"all 9 providers failed\"\n} }}"
+      },
+      "id": "respond-fail",
+      "name": "Respond No Provider",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Call Groq": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call OpenRouter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call OpenRouter": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Together",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Together": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Fireworks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Fireworks": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call DeepInfra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call DeepInfra": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Mistral",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Mistral": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Perplexity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Perplexity": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call DeepSeek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call DeepSeek": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Anyscale",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Anyscale": {
+      "main": [
+        [
+          {
+            "node": "Respond to CLI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond No Provider",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Call Groq",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

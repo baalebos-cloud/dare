@@ -1,0 +1,30 @@
+# Secrets — never commit real values, only .example templates
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Go
+/cli/dare
+/cli/*.exe
+/cli/troubleshoot_*.tar.gz
+/cli/troubleshoot_*.zip
+/cli/dare_*.tar.gz
+/cli/dare_*.zip
+
+# Node
+node_modules/
+dist/
+package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+
+# Editor/OS
+.DS_Store
+.vscode/
+.idea/

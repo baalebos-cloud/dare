@@ -1,0 +1,10 @@
+[project]
+name = "dare-sdk"
+version = "0.1.0"
+description = "Python SDK for the dare LLM debugging CLI — captures tracebacks and forwards them to the core binary for diagnosis."
+requires-python = ">=3.8"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
